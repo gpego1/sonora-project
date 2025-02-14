@@ -14,18 +14,14 @@ import java.util.Optional;
 
 @Service
 public class CustomerService {
-
     @Autowired
     private CustomerRepository customerRepository;
-
     public List<Customer> getAllCustomers() {
         return customerRepository.findAll();
     }
-
     public Optional<Customer> getCustomerById(Long id) {
         return customerRepository.findById(id);
     }
-
     public Customer saveCustomer(Customer customer) {
         return customerRepository.save(customer);
     }
@@ -34,7 +30,6 @@ public class CustomerService {
     public Customer updateCustomer(Long id, Customer customer) {
         Customer existingCustomer = customerRepository.findById(id)  // Get it ONCE, outside the try
                 .orElseThrow(() -> new EntityNotFoundException("Customer not found"));
-
         try {
             if (!customer.getName().equals(existingCustomer.getName())) {
                 existingCustomer.setName(customer.getName());
@@ -51,13 +46,11 @@ public class CustomerService {
             if (!customer.getPassword().equals(existingCustomer.getPassword())) {
                 existingCustomer.setPassword(customer.getPassword());
             }
-
             return customerRepository.save(existingCustomer); // Save the SAME entity
         } catch (StaleObjectStateException ex) {
             throw new OptimisticLockException("The data you were trying to update has been modified by another user. Please refresh the data and try again.");
         }
     }
-
     public void deleteCustomer(Long id) {
         customerRepository.deleteById(id);
     }
