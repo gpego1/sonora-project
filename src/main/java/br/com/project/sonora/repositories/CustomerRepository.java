@@ -8,6 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
-    @Lock(LockModeType.PESSIMISTIC_WRITE)
     Optional<Customer> findById(Long id);
 }
