@@ -17,10 +17,6 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
-    @GetMapping("/customer/{customerId}") // Nova rota
-    public List<Order> getOrdersByCustomerId(@PathVariable Long customerId) {
-        return orderService.getOrdersByCustomerId(customerId);
-    }
     @GetMapping
     public List<Order> getAllOrders() {
         return orderService.getAllOrders();

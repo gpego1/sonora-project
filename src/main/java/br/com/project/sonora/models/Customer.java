@@ -1,4 +1,5 @@
 package br.com.project.sonora.models;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,7 +19,8 @@ public class Customer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany
+    @JsonIgnore
+    @OneToMany(mappedBy = "customers")
     private List<Order> orders;
 
     @Column(nullable = false)

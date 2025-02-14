@@ -24,6 +24,8 @@ public class Order {
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
+
+
     public Order(Long id, Date date, String endereco, Customer customer) {
         this.id = id;
         this.date = date;
@@ -41,5 +43,14 @@ public class Order {
     @Override
     public int hashCode() {
         return Objects.hashCode(id);
+    }
+    @Override
+    public String toString() {
+        return "Order{" +
+                "id=" + id +
+                ", date=" + date +
+                ", endereco='" + endereco + '\'' +
+                ", customer=" + customer +
+                '}';
     }
 }

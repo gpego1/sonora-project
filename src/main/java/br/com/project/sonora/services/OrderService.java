@@ -22,9 +22,7 @@ public class OrderService {
     public Optional<Order> getOrderById(Long id) {
         return orderRepository.findById(id);
     }
-    public List<Order> getOrdersByCustomerId(Long customerId) {
-        return orderRepository.findByCustomerId(customerId);
-    }
+
     public Order saveOrder(Order order) {
         if (order.getCustomer() == null || order.getCustomer().getId() == null) {
             throw new IllegalArgumentException("The order mus have another Customer.");
