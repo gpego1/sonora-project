@@ -1,10 +1,8 @@
 package br.com.project.sonora.models;
-
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import java.util.Objects;
 
 @Entity
@@ -30,7 +28,11 @@ public class Customer {
     @Column(nullable = false)
     private String password;
 
+    @Column(nullable = false)
     private String phone;
+
+   @Version
+    private Integer version;
 
     public Customer(String name, String cpf, String email, String password, String phone) {
         this.name = name;
