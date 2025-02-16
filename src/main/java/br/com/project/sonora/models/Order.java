@@ -17,18 +17,27 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false)
     private Date date;
-    private String endereco;
+
+    @Column(nullable = false)
+    private String address;
 
     @ManyToOne
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
-    public Order(Long id, Date date, String endereco, Customer customer) {
+    @ManyToOne
+    @JoinColumn(name = "post_id")
+    private Post post;
+
+    public Order(Long id, Date date, String address, Customer customer, Post post) {
         this.id = id;
         this.date = date;
-        this.endereco = endereco;
+        this.address = address;
         this.customer = customer;
+        this.post = post;
     }
 
     @Override
@@ -47,7 +56,7 @@ public class Order {
         return "Order{" +
                 "id=" + id +
                 ", date=" + date +
-                ", endereco='" + endereco + '\'' +
+                ", endereco='" + address + '\'' +
                 ", customer=" + customer +
                 '}';
     }

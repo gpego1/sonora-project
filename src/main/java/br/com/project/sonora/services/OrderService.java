@@ -1,7 +1,9 @@
 package br.com.project.sonora.services;
 import br.com.project.sonora.models.Customer;
 import br.com.project.sonora.models.Order;
+import br.com.project.sonora.models.Post;
 import br.com.project.sonora.repositories.OrderRepository;
+import br.com.project.sonora.repositories.PostRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.OptimisticLockException;
 import org.hibernate.StaleObjectStateException;
@@ -28,6 +30,10 @@ public class OrderService {
     public List<Order> getOrderByCustomerId(Long customerId) {
         return orderRepository.findByCustomerId(customerId);
     }
+    public List<Order> getOrdersByPost(Post post) {
+        return orderRepository.findByPost(post);
+    }
+
 
     public Order saveOrder(Order order) {
         if (order.getCustomer() == null || order.getCustomer().getId() == null) {
@@ -43,13 +49,18 @@ public class OrderService {
         if (order.getDate() != null) {
             existingOrder.setDate(order.getDate());
         }
-        if (order.getEndereco() != null) {
-            existingOrder.setEndereco(order.getEndereco());
+        if (order.getAddress() != null) {
+            existingOrder.setAddress(order.getAddress());
         }
         if (order.getCustomer() != null && order.getCustomer().getId() != null) {
             Customer customer = new Customer();
             customer.setId(order.getCustomer().getId());
             existingOrder.setCustomer(customer);
+        }
+        if (order.getPost() != null && order.getPost().getId() != null) {
+            Post post = new Post();
+            post.setId(order.getPost().getId());
+            existingOrder.setPost(post);
         }
         return orderRepository.save(existingOrder);
     } catch (StaleObjectStateException ex) {

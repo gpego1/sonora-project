@@ -2,6 +2,9 @@ package br.com.project.sonora.controllers;
 import br.com.project.sonora.errors.ErrorResponse;
 import br.com.project.sonora.models.Customer;
 import br.com.project.sonora.models.Order;
+import br.com.project.sonora.models.Post;
+import br.com.project.sonora.repositories.OrderRepository;
+import br.com.project.sonora.repositories.PostRepository;
 import br.com.project.sonora.services.OrderService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.OptimisticLockException;
@@ -17,6 +20,11 @@ public class OrderController {
 
     @Autowired
     private OrderService orderService;
+
+    @Autowired
+    private PostRepository postRepository;
+    @Autowired
+    private OrderRepository orderRepository;
 
     @GetMapping
     public List<Order> getAllOrders() {
@@ -36,6 +44,12 @@ public class OrderController {
         public List<Order> getOrderByCostumerId(@PathVariable Long customerId){
             return orderService.getOrderByCustomerId(customerId);
     }
+    @GetMapping("/post/{postId}/orders")
+    public List<Order> getOrdersByPost(@PathVariable Long postId) {
+        Post post = postRepository.findById(postId).orElse(null);
+        return orderService.getOrdersByPost(post);
+    }
+
     @PostMapping
     public Order createOrder(@RequestBody Order order) {
         return orderService.saveOrder(order);

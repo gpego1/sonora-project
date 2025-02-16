@@ -1,4 +1,7 @@
-package br.com.project.sonora.models;import jakarta.persistence.*;
+package br.com.project.sonora.models;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -6,6 +9,7 @@ import lombok.Setter;
 import java.time.Duration;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 
 @Entity
@@ -21,6 +25,11 @@ public class Post {
     @ManyToOne
     @JoinColumn(name = "seller_id")
     private Seller seller;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "post")
+    private List<Order> orders;
+
 
     @Column(nullable = false)
     private String title;
