@@ -1,8 +1,11 @@
 package br.com.project.sonora.models;import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.time.Duration;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 
 @Entity
@@ -26,7 +29,7 @@ public class Post {
     private String description;
 
     @Column(nullable = false)
-    private Duration duration;
+    private LocalTime duration;
 
     @Column(nullable = false)
     private Integer qtd_sits;
@@ -34,7 +37,7 @@ public class Post {
     @Column(nullable = false)
     private Double price;
 
-    public Post(String title, String description, Duration duration, Integer qtd_sits, Double price, Seller seller) {
+    public Post(String title, String description, LocalTime duration, Integer qtd_sits, Double price, Seller seller) {
         this.title = title;
         this.description = description;
         this.duration = duration;

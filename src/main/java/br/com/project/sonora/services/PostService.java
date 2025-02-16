@@ -1,6 +1,7 @@
 package br.com.project.sonora.services;
 
 import br.com.project.sonora.models.Post;
+import br.com.project.sonora.models.Seller;
 import br.com.project.sonora.repositories.PostRepository;
 import jakarta.persistence.OptimisticLockException;
 import jakarta.transaction.Transactional;
@@ -21,6 +22,12 @@ public class PostService {
     }
     public Optional<Post> getPostById(Long id) {
         return postRepository.findById(id);
+    }
+    public List<Post> getPostBySeller(Seller seller) {
+        return postRepository.findBySeller(seller);
+    }
+    public List<Post> getPostBySellerId(long sellerId) {
+        return postRepository.findBySellerId(sellerId);
     }
     public Post savePost(Post post) {
         if (post.getSeller() == null || post.getSeller().getId() == null ) {

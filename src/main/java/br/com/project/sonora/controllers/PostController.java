@@ -2,6 +2,7 @@ package br.com.project.sonora.controllers;
 import br.com.project.sonora.errors.ErrorResponse;
 import br.com.project.sonora.errors.exceptions.EntityNotFoundException;
 import br.com.project.sonora.models.Post;
+import br.com.project.sonora.models.Seller;
 import br.com.project.sonora.services.PostService;
 import jakarta.persistence.OptimisticLockException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,14 +23,20 @@ public class PostController {
     public List<Post> getAllPosts() {
         return postService.getAllPosts();
     }
-
     @GetMapping("/{id}")
     public ResponseEntity<Post> getPostById(@PathVariable Long id) {
         return postService.getPostById(id)
                 .map(post -> ResponseEntity.ok(post))
                 .orElse(ResponseEntity.notFound().build());
     }
-
+    @GetMapping("/seller")
+    public List<Post> getPostBySeller(@RequestBody Seller seller) {
+        return postService.getPostBySeller(seller);
+    }
+    @GetMapping("/seller/{sellerId}")
+    public List<Post> getPostBySellerById(@PathVariable Long sellerId) {
+        return postService.getPostBySellerId(sellerId);
+    }
     @PostMapping
     public Post createPost(@RequestBody Post post) {
         return postService.savePost(post);
