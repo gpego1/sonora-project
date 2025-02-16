@@ -22,6 +22,12 @@ public class OrderService {
     public Optional<Order> getOrderById(Long id) {
         return orderRepository.findById(id);
     }
+    public List<Order> getOrderByCustomer(Customer customer) {
+        return orderRepository.findByCustomer(customer);
+    }
+    public List<Order> getOrderByCustomerId(Long customerId) {
+        return orderRepository.findByCustomerId(customerId);
+    }
 
     public Order saveOrder(Order order) {
         if (order.getCustomer() == null || order.getCustomer().getId() == null) {

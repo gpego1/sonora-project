@@ -1,5 +1,6 @@
 package br.com.project.sonora.controllers;
 import br.com.project.sonora.errors.ErrorResponse;
+import br.com.project.sonora.models.Customer;
 import br.com.project.sonora.models.Order;
 import br.com.project.sonora.services.OrderService;
 import jakarta.persistence.EntityNotFoundException;
@@ -26,6 +27,14 @@ public class OrderController {
         return orderService.getOrderById(id)
                 .map(order -> ResponseEntity.ok(order))
                 .orElse(ResponseEntity.notFound().build());
+    }
+    @GetMapping("/customer")
+    public List<Order> getOrderByCustomer(@RequestBody Customer customer) {
+        return orderService.getOrderByCustomer(customer);
+    }
+    @GetMapping("/customer/{customerId}")
+        public List<Order> getOrderByCostumerId(@PathVariable Long customerId){
+            return orderService.getOrderByCustomerId(customerId);
     }
     @PostMapping
     public Order createOrder(@RequestBody Order order) {
