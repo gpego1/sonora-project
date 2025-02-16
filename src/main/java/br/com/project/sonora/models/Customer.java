@@ -20,7 +20,7 @@ public class Customer {
     private Long id;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "customers")
+    @OneToMany(mappedBy = "customer")
     private List<Order> orders;
 
     @Column(nullable = false)

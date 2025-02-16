@@ -24,8 +24,6 @@ public class Order {
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
-
-
     public Order(Long id, Date date, String endereco, Customer customer) {
         this.id = id;
         this.date = date;

@@ -1,10 +1,12 @@
 package br.com.project.sonora.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -16,6 +18,10 @@ public class Seller {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "seller")
+    private List<Post> posts;
 
     @Column(nullable = false)
     private String name;
