@@ -1,5 +1,4 @@
 package br.com.project.sonora.services;
-
 import br.com.project.sonora.models.Customer;
 import br.com.project.sonora.repositories.CustomerRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -26,7 +25,6 @@ public class CustomerService {
     public Customer saveCustomer(Customer customer) {
         return customerRepository.save(customer);
     }
-
     @Transactional
     public Customer updateCustomer(Long id, Customer customer) {
         Customer existingCustomer = customerRepository.findById(id)  // Get it ONCE, outside the try
