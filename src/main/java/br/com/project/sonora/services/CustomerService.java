@@ -27,7 +27,7 @@ public class CustomerService {
     }
     @Transactional
     public Customer updateCustomer(Long id, Customer customer) {
-        Customer existingCustomer = customerRepository.findById(id)  // Get it ONCE, outside the try
+        Customer existingCustomer = customerRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Customer not found"));
         try {
             if (!customer.getName().equals(existingCustomer.getName())) {
@@ -45,7 +45,7 @@ public class CustomerService {
             if (!customer.getPassword().equals(existingCustomer.getPassword())) {
                 existingCustomer.setPassword(customer.getPassword());
             }
-            return customerRepository.save(existingCustomer); // Save the SAME entity
+            return customerRepository.save(existingCustomer);
         } catch (StaleObjectStateException ex) {
             throw new OptimisticLockException("The data you were trying to update has been modified by another user. Please refresh the data and try again.");
         }
