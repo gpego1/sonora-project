@@ -21,7 +21,7 @@ public class Customer {
 
     @JsonIgnore
     @OneToMany(mappedBy = "customer")
-    private List<Order> orders;
+    private List<Event> events;
 
     @Column(nullable = false)
     private String name;

@@ -1,11 +1,11 @@
 package br.com.project.sonora.controllers;
 import br.com.project.sonora.errors.ErrorResponse;
 import br.com.project.sonora.models.Customer;
-import br.com.project.sonora.models.Order;
-import br.com.project.sonora.models.Post;
-import br.com.project.sonora.repositories.OrderRepository;
-import br.com.project.sonora.repositories.PostRepository;
-import br.com.project.sonora.services.OrderService;
+import br.com.project.sonora.models.Event;
+import br.com.project.sonora.models.Tickets;
+import br.com.project.sonora.repositories.EventRepository;
+import br.com.project.sonora.repositories.TicketRepository;
+import br.com.project.sonora.services.EventService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.OptimisticLockException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,46 +19,46 @@ import java.util.List;
 public class OrderController {
 
     @Autowired
-    private OrderService orderService;
+    private EventService eventService;
 
     @Autowired
-    private PostRepository postRepository;
+    private TicketRepository postRepository;
     @Autowired
-    private OrderRepository orderRepository;
+    private EventRepository eventRepository;
 
     @GetMapping
-    public List<Order> getAllOrders() {
-        return orderService.getAllOrders();
+    public List<Event> getAllOrders() {
+        return eventService.getAllOrders();
     }
     @GetMapping("/{id}")
-    public ResponseEntity<Order> getOrderById(@PathVariable Long id) {
-        return orderService.getOrderById(id)
+    public ResponseEntity<Event> getOrderById(@PathVariable Long id) {
+        return eventService.getOrderById(id)
                 .map(order -> ResponseEntity.ok(order))
                 .orElse(ResponseEntity.notFound().build());
     }
     @GetMapping("/customer")
-    public List<Order> getOrderByCustomer(@RequestBody Customer customer) {
-        return orderService.getOrderByCustomer(customer);
+    public List<Event> getOrderByCustomer(@RequestBody Customer customer) {
+        return eventService.getOrderByCustomer(customer);
     }
     @GetMapping("/customer/{customerId}")
-        public List<Order> getOrderByCostumerId(@PathVariable Long customerId){
-            return orderService.getOrderByCustomerId(customerId);
+        public List<Event> getOrderByCostumerId(@PathVariable Long customerId){
+            return eventService.getOrderByCustomerId(customerId);
     }
     @GetMapping("/post/{postId}/orders")
-    public List<Order> getOrdersByPost(@PathVariable Long postId) {
-        Post post = postRepository.findById(postId).orElse(null);
-        return orderService.getOrdersByPost(post);
+    public List<Event> getOrdersByPost(@PathVariable Long postId) {
+        Tickets post = postRepository.findById(postId).orElse(null);
+        return eventService.getOrdersByPost(post);
     }
 
     @PostMapping
-    public Order createOrder(@RequestBody Order order) {
-        return orderService.saveOrder(order);
+    public Event createOrder(@RequestBody Event event) {
+        return eventService.saveOrder(event);
     }
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateOrder(@PathVariable Long id, @RequestBody Order order) {
+    public ResponseEntity<?> updateOrder(@PathVariable Long id, @RequestBody Event event) {
         try {
-            Order updatedOrder = orderService.updateOrder(id, order);
-            return ResponseEntity.ok(updatedOrder);
+            Event updatedEvent = eventService.updateOrder(id, event);
+            return ResponseEntity.ok(updatedEvent);
         } catch (OptimisticLockException ex) {
             return ResponseEntity.status(HttpStatus.CONFLICT)
                     .body(new ErrorResponse(HttpStatus.CONFLICT.value(), ex.getMessage()));
@@ -72,7 +72,7 @@ public class OrderController {
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteOrder(@PathVariable Long id) {
-        orderService.deleteOrder(id);
+        eventService.deleteOrder(id);
         return ResponseEntity.noContent().build();
     }
 }

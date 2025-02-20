@@ -6,14 +6,16 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "orders")
 @Getter
 @Setter
 @NoArgsConstructor
-public class Order {
+public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -24,26 +26,38 @@ public class Order {
     @Column(nullable = false)
     private String address;
 
-    @ManyToOne
-    @JoinColumn(name = "customer_id")
-    private Customer customer;
+
+    @ManyToMany
+    @JoinTable(
+            name = "event-genders",
+            joinColumns = @JoinColumn(name = "event_id"),
+            inverseJoinColumns = @JoinColumn(name = "gender_id")
+    )
+    private Set<GeneralMusic> generalMusics = new HashSet<>();
+    @ManyToMany
+    @JoinTable(
+            name = "artists-events",
+            joinColumns = @JoinColumn(name = "event_id"),
+            inverseJoinColumns = @JoinColumn(name = "artist_id")
+    )
+    private Set<Artist> artists = new HashSet<>();
+
 
     @ManyToOne
-    @JoinColumn(name = "post_id")
-    private Post post;
+    @JoinColumn(name = "ticket_id")
+    private Tickets ticket;
 
-    public Order(Long id, Date date, String address, Customer customer, Post post) {
+    public Event(Long id, Date date, String address, Tickets ticket) {
         this.id = id;
         this.date = date;
         this.address = address;
-        this.customer = customer;
-        this.post = post;
+        this.ticket = ticket;
     }
 
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
-        Order reserve = (Order) o;
+        Event reserve = (Event) o;
         return Objects.equals(id, reserve.id);
     }
 
@@ -57,7 +71,7 @@ public class Order {
                 "id=" + id +
                 ", date=" + date +
                 ", endereco='" + address + '\'' +
-                ", customer=" + customer +
+                ", customer=" +
                 '}';
     }
 }

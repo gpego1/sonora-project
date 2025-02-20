@@ -6,22 +6,27 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "sellers")
 @Getter
 @Setter
 @NoArgsConstructor
-public class Seller {
+public class Artist {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "seller")
-    private List<Post> posts;
+    @OneToMany(mappedBy = "artist")
+    private List<Tickets> ticket;
+
+    @ManyToMany(mappedBy = "artists")
+    private Set<Event> events = new HashSet<>();
 
     @Column(nullable = false)
     private String name;
@@ -41,7 +46,7 @@ public class Seller {
     @Version
     private Integer version;
 
-    public Seller(String name, String cpf, String email, String password, String phone) {
+    public Artist(String name, String cpf, String email, String password, String phone) {
         this.name = name;
         this.cpf = cpf;
         this.email = email;
@@ -53,8 +58,8 @@ public class Seller {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Seller seller = (Seller) o;
-        return Objects.equals(cpf, seller.cpf);
+        Artist artist = (Artist) o;
+        return Objects.equals(cpf, artist.cpf);
     }
 
     @Override

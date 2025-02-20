@@ -2,33 +2,31 @@ package br.com.project.sonora.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import java.time.Duration;
+
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 
 @Entity
-@Table(name = "posts")
+@Table(name = "tickets")
 @Getter
 @Setter
 @NoArgsConstructor
-public class Post {
+public class Tickets {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "seller_id")
-    private Seller seller;
+    @JoinColumn(name = "artist_id")
+    private Artist artist;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "post")
-    private List<Order> orders;
+    @OneToMany(mappedBy = "ticket")
+    private List<Event> events;
 
 
     @Column(nullable = false)
@@ -46,13 +44,13 @@ public class Post {
     @Column(nullable = false)
     private Double price;
 
-    public Post(String title, String description, LocalTime duration, Integer qtd_sits, Double price, Seller seller) {
+    public Tickets(String title, String description, LocalTime duration, Integer qtd_sits, Double price, Artist artist) {
         this.title = title;
         this.description = description;
         this.duration = duration;
         this.qtd_sits = qtd_sits;
         this.price = price;
-        this.seller = seller;
+        this.artist = artist;
     }
 
 }

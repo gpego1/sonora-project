@@ -1,7 +1,6 @@
 package br.com.project.sonora.controllers;
 
 import br.com.project.sonora.models.Customer;
-import br.com.project.sonora.models.Order;
 import br.com.project.sonora.services.CustomerService;
 import jakarta.persistence.OptimisticLockException;
 import org.springframework.beans.factory.annotation.Autowired;

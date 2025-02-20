@@ -1,8 +1,8 @@
 package br.com.project.sonora.services;
 
-import br.com.project.sonora.models.Post;
-import br.com.project.sonora.models.Seller;
-import br.com.project.sonora.repositories.PostRepository;
+import br.com.project.sonora.models.Tickets;
+import br.com.project.sonora.models.Artist;
+import br.com.project.sonora.repositories.TicketRepository;
 import jakarta.persistence.OptimisticLockException;
 import jakarta.transaction.Transactional;
 import org.hibernate.StaleObjectStateException;
@@ -13,31 +13,31 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class PostService {
+public class TicketService {
     @Autowired
-    private PostRepository postRepository;
+    private TicketRepository postRepository;
 
-    public List<Post> getAllPosts() {
+    public List<Tickets> getAllPosts() {
         return postRepository.findAll();
     }
-    public Optional<Post> getPostById(Long id) {
+    public Optional<Tickets> getPostById(Long id) {
         return postRepository.findById(id);
     }
-    public List<Post> getPostBySeller(Seller seller) {
-        return postRepository.findBySeller(seller);
+    public List<Tickets> getPostBySeller(Artist artist) {
+        return postRepository.findBySeller(artist);
     }
-    public List<Post> getPostBySellerId(long sellerId) {
+    public List<Tickets> getPostBySellerId(long sellerId) {
         return postRepository.findBySellerId(sellerId);
     }
-    public Post savePost(Post post) {
-        if (post.getSeller() == null || post.getSeller().getId() == null ) {
+    public Tickets savePost(Tickets post) {
+        if (post.getArtist() == null || post.getArtist().getId() == null ) {
             throw new IllegalArgumentException("Post must have a seller");
         }
         return postRepository.save(post);
     }
     @Transactional
-    public Post updatePost(Long id, Post post) {
-        Post existingPost = postRepository.findById(id)
+    public Tickets updatePost(Long id, Tickets post) {
+        Tickets existingPost = postRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Post not found"));
             try {
                 if(post.getPrice() != null) {
@@ -55,8 +55,8 @@ public class PostService {
                 if(post.getPrice()!= null) {
                     existingPost.setPrice(post.getPrice());
                 }
-                if(post.getSeller()!= null) {
-                    existingPost.setSeller(post.getSeller());
+                if(post.getArtist()!= null) {
+                    existingPost.setArtist(post.getArtist());
                 }
                 return postRepository.save(existingPost);
                 } catch (StaleObjectStateException e) {

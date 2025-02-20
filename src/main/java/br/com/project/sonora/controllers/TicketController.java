@@ -1,11 +1,9 @@
 package br.com.project.sonora.controllers;
 import br.com.project.sonora.errors.ErrorResponse;
 import br.com.project.sonora.errors.exceptions.EntityNotFoundException;
-import br.com.project.sonora.models.Order;
-import br.com.project.sonora.models.Post;
-import br.com.project.sonora.models.Seller;
-import br.com.project.sonora.repositories.OrderRepository;
-import br.com.project.sonora.services.PostService;
+import br.com.project.sonora.models.Tickets;
+import br.com.project.sonora.models.Artist;
+import br.com.project.sonora.services.TicketService;
 import jakarta.persistence.OptimisticLockException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,40 +14,38 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/posts")
-public class PostController {
+public class TicketController {
 
     @Autowired
-    private PostService postService;
-    @Autowired
-    private OrderRepository orderRepository;
+    private TicketService ticketService;
 
     @GetMapping
-    public List<Post> getAllPosts() {
-        return postService.getAllPosts();
+    public List<Tickets> getAllPosts() {
+        return ticketService.getAllPosts();
     }
     @GetMapping("/{id}")
-    public ResponseEntity<Post> getPostById(@PathVariable Long id) {
-        return postService.getPostById(id)
+    public ResponseEntity<Tickets> getPostById(@PathVariable Long id) {
+        return ticketService.getPostById(id)
                 .map(post -> ResponseEntity.ok(post))
                 .orElse(ResponseEntity.notFound().build());
     }
     @GetMapping("/seller")
-    public List<Post> getPostBySeller(@RequestBody Seller seller) {
-        return postService.getPostBySeller(seller);
+    public List<Tickets> getPostBySeller(@RequestBody Artist artist) {
+        return ticketService.getPostBySeller(artist);
     }
     @GetMapping("/seller/{sellerId}")
-    public List<Post> getPostBySellerById(@PathVariable Long sellerId) {
-        return postService.getPostBySellerId(sellerId);
+    public List<Tickets> getPostBySellerById(@PathVariable Long sellerId) {
+        return ticketService.getPostBySellerId(sellerId);
     }
     @PostMapping
-    public Post createPost(@RequestBody Post post) {
-        return postService.savePost(post);
+    public Tickets createPost(@RequestBody Tickets post) {
+        return ticketService.savePost(post);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updatePost(@PathVariable Long id, @RequestBody Post post) {
+    public ResponseEntity<?> updatePost(@PathVariable Long id, @RequestBody Tickets post) {
         try {
-            Post updatedPost = postService.updatePost(id, post);
+            Tickets updatedPost = ticketService.updatePost(id, post);
             return ResponseEntity.ok(updatedPost);
         } catch (OptimisticLockException ex) {
             return ResponseEntity.status(HttpStatus.CONFLICT)
@@ -64,7 +60,7 @@ public class PostController {
     }
         @DeleteMapping("/{id}")
         public ResponseEntity<Void> deletePost (@PathVariable Long id){
-            postService.deletePost(id);
+            ticketService.deletePost(id);
             return ResponseEntity.noContent().build();
         }
 
