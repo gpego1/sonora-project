@@ -34,6 +34,7 @@ public class Event {
             inverseJoinColumns = @JoinColumn(name = "gender_id")
     )
     private Set<GeneralMusic> generalMusics = new HashSet<>();
+
     @ManyToMany
     @JoinTable(
             name = "artists-events",
@@ -47,11 +48,14 @@ public class Event {
     @JoinColumn(name = "ticket_id")
     private Tickets ticket;
 
-    public Event(Long id, Date date, String address, Tickets ticket) {
+    public Event(Long id, Date date, String address, Tickets ticket, Set<GeneralMusic> generalMusics, Set<Artist> artists) {
         this.id = id;
         this.date = date;
         this.address = address;
         this.ticket = ticket;
+        this.generalMusics = generalMusics;
+        this.artists = artists;
+
     }
 
     @Override

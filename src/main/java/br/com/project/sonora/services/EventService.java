@@ -35,7 +35,7 @@ public class EventService {
 
 
     public Event saveOrder(Event event) {
-        if (event.getCustomer() == null || event.getCustomer().getId() == null) {
+        if (event.get() == null || event.getCustomer().getId() == null) {
             throw new IllegalArgumentException("The order mus have another Customer.");
         }
         return eventRepository.save(event);
