@@ -15,29 +15,25 @@ import java.util.Optional;
 @Service
 public class TicketService {
     @Autowired
-    private TicketRepository postRepository;
+    private TicketRepository ticketRepository;
 
-    public List<Tickets> getAllPosts() {
-        return postRepository.findAll();
+    public List<Tickets> getAllPosts() {return ticketRepository.findAll();}
+    public Optional<Tickets> getPostById(Long id) {return ticketRepository.findById(id);}
+    public List<Tickets> getTicketByArtist(Artist artist) {
+        return ticketRepository.findByArtist(artist);
     }
-    public Optional<Tickets> getPostById(Long id) {
-        return postRepository.findById(id);
-    }
-    public List<Tickets> getPostBySeller(Artist artist) {
-        return postRepository.findBySeller(artist);
-    }
-    public List<Tickets> getPostBySellerId(long sellerId) {
-        return postRepository.findBySellerId(sellerId);
+    public List<Tickets> getTicketByArtistId(long artistId) {
+        return ticketRepository.findByArtistId(artistId);
     }
     public Tickets savePost(Tickets post) {
         if (post.getArtist() == null || post.getArtist().getId() == null ) {
             throw new IllegalArgumentException("Post must have a seller");
         }
-        return postRepository.save(post);
+        return ticketRepository.save(post);
     }
     @Transactional
     public Tickets updatePost(Long id, Tickets post) {
-        Tickets existingPost = postRepository.findById(id)
+        Tickets existingPost = ticketRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Post not found"));
             try {
                 if(post.getPrice() != null) {
@@ -58,12 +54,12 @@ public class TicketService {
                 if(post.getArtist()!= null) {
                     existingPost.setArtist(post.getArtist());
                 }
-                return postRepository.save(existingPost);
+                return ticketRepository.save(existingPost);
                 } catch (StaleObjectStateException e) {
                 throw new OptimisticLockException("Invalid update request");
             }
     }
     public void deletePost(Long id) {
-        postRepository.deleteById(id);
+        ticketRepository.deleteById(id);
     }
 }

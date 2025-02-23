@@ -28,6 +28,10 @@ public class Tickets {
     @OneToMany(mappedBy = "ticket")
     private List<Event> events;
 
+    @ManyToOne
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
+
 
     @Column(nullable = false)
     private String title;
@@ -44,13 +48,14 @@ public class Tickets {
     @Column(nullable = false)
     private Double price;
 
-    public Tickets(String title, String description, LocalTime duration, Integer qtd_sits, Double price, Artist artist) {
+    public Tickets(String title, String description, LocalTime duration, Integer qtd_sits, Double price, Artist artist, Customer customer) {
         this.title = title;
         this.description = description;
         this.duration = duration;
         this.qtd_sits = qtd_sits;
         this.price = price;
         this.artist = artist;
+        this.customer = customer;
     }
 
 }

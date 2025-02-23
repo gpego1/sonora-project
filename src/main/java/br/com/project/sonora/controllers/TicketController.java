@@ -29,13 +29,11 @@ public class TicketController {
                 .map(post -> ResponseEntity.ok(post))
                 .orElse(ResponseEntity.notFound().build());
     }
-    @GetMapping("/seller")
-    public List<Tickets> getPostBySeller(@RequestBody Artist artist) {
-        return ticketService.getPostBySeller(artist);
-    }
-    @GetMapping("/seller/{sellerId}")
-    public List<Tickets> getPostBySellerById(@PathVariable Long sellerId) {
-        return ticketService.getPostBySellerId(sellerId);
+    @GetMapping("/artist")
+    public List<Tickets> getPostBySeller(@RequestBody Artist artist) {return ticketService.getTicketByArtist(artist);}
+    @GetMapping("/artist/{artistId}")
+    public List<Tickets> getPostBySellerById(@PathVariable Long artistId) {
+        return ticketService.getTicketByArtistId(artistId);
     }
     @PostMapping
     public Tickets createPost(@RequestBody Tickets post) {

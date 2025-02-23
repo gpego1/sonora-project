@@ -18,13 +18,13 @@ public class CustomerService {
     public List<Customer> getAllCustomers() {
         return customerRepository.findAll();
     }
-
     public Optional<Customer> getCustomerById(Long id) {
         return customerRepository.findById(id);
     }
     public Customer saveCustomer(Customer customer) {
         return customerRepository.save(customer);
     }
+    
     @Transactional
     public Customer updateCustomer(Long id, Customer customer) {
         Customer existingCustomer = customerRepository.findById(id)
