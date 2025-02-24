@@ -1,13 +1,10 @@
 package br.com.project.sonora.models;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import java.util.HashSet;
-import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -16,7 +13,8 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Artist {
+@AllArgsConstructor
+public class Artist implements User{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -44,16 +42,6 @@ public class Artist {
 
     @Version
     private Integer version;
-
-    public Artist(String name, String cpf, String email, String password, String phone, Set<Event> events,Set<ArtistEventSetlist> artistEventSetlists) {
-        this.name = name;
-        this.cpf = cpf;
-        this.email = email;
-        this.password = password;
-        this.phone = phone;
-        this.events = events;
-        this.artistEventSetlists = artistEventSetlists;
-    }
 
     @Override
     public boolean equals(Object o) {
