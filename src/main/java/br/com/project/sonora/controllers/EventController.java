@@ -1,5 +1,4 @@
 package br.com.project.sonora.controllers;
-
 import br.com.project.sonora.models.Artist;
 import br.com.project.sonora.models.Event;
 import br.com.project.sonora.models.GeneralMusic;
@@ -9,10 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
+
 
 @RestController
 @RequestMapping("/events")
@@ -99,7 +97,7 @@ public class EventController {
     }
     @GetMapping("/ticket/{ticketId}")
     public ResponseEntity<List<Event>> getEventsByTicketId(@PathVariable Long ticketId) {
-        List<Event> events = eventService.getEventByGeneralMusicId(ticketId);
+        List<Event> events = eventService.getEventByTicketId(ticketId);
         return new ResponseEntity<>(events, HttpStatus.OK);
     }
 }

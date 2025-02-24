@@ -11,7 +11,7 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
-@Table(name = "orders")
+@Table(name = "events")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -25,7 +25,6 @@ public class Event {
 
     @Column(nullable = false)
     private String address;
-
 
     @ManyToMany
     @JoinTable(
@@ -43,19 +42,19 @@ public class Event {
     )
     private Set<Artist> artists = new HashSet<>();
 
+    @OneToMany(mappedBy = "event")
+    private Set<ArtistEventSetlist> artistEventSetlists = new HashSet<>();
 
-    @ManyToOne
-    @JoinColumn(name = "ticket_id")
-    private Tickets ticket;
+    @OneToMany(mappedBy = "event")
+    private Set<Tickets> tickets = new HashSet<>();
 
-    public Event(Long id, Date date, String address, Tickets ticket, Set<GeneralMusic> generalMusics, Set<Artist> artists) {
+    public Event(Long id, Date date, String address, Set<GeneralMusic> generalMusics, Set<Artist> artists, Set<ArtistEventSetlist> artistEventSetlists) {
         this.id = id;
         this.date = date;
         this.address = address;
-        this.ticket = ticket;
         this.generalMusics = generalMusics;
         this.artists = artists;
-
+        this.artistEventSetlists = artistEventSetlists;
     }
 
     @Override

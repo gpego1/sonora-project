@@ -7,7 +7,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalTime;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 @Entity
@@ -21,17 +23,12 @@ public class Tickets {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "artist_id")
-    private Artist artist;
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "ticket")
-    private List<Event> events;
+    @JoinColumn(name = "event_id")
+    private Event event;
 
     @ManyToOne
     @JoinColumn(name = "customer_id")
     private Customer customer;
-
 
     @Column(nullable = false)
     private String title;
@@ -48,14 +45,14 @@ public class Tickets {
     @Column(nullable = false)
     private Double price;
 
-    public Tickets(String title, String description, LocalTime duration, Integer qtd_sits, Double price, Artist artist, Customer customer) {
+    public Tickets(String title, String description, LocalTime duration, Integer qtd_sits, Double price, Customer customer, Event event) {
         this.title = title;
         this.description = description;
         this.duration = duration;
         this.qtd_sits = qtd_sits;
         this.price = price;
-        this.artist = artist;
         this.customer = customer;
+        this.event = event;
     }
 
 }

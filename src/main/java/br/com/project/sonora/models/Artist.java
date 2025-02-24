@@ -12,7 +12,7 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
-@Table(name = "sellers")
+@Table(name = "artists")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -21,12 +21,11 @@ public class Artist {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "artist")
-    private List<Tickets> ticket;
-
     @ManyToMany(mappedBy = "artists")
     private Set<Event> events = new HashSet<>();
+
+    @OneToMany(mappedBy = "artist")
+    private Set<ArtistEventSetlist> artistEventSetlists = new HashSet<>();
 
     @Column(nullable = false)
     private String name;
@@ -46,12 +45,14 @@ public class Artist {
     @Version
     private Integer version;
 
-    public Artist(String name, String cpf, String email, String password, String phone) {
+    public Artist(String name, String cpf, String email, String password, String phone, Set<Event> events,Set<ArtistEventSetlist> artistEventSetlists) {
         this.name = name;
         this.cpf = cpf;
         this.email = email;
         this.password = password;
         this.phone = phone;
+        this.events = events;
+        this.artistEventSetlists = artistEventSetlists;
     }
 
     @Override

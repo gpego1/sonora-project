@@ -6,6 +6,7 @@ import br.com.project.sonora.models.GeneralMusic;
 import br.com.project.sonora.models.Tickets;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
@@ -17,7 +18,11 @@ public interface EventRepository extends JpaRepository<Event, Long> {
     Optional<Event> findById(Long id);
     List<Event> findByGeneralMusics(GeneralMusic gender);
     List<Event> findByGeneralMusicsId(@Param("genderId") Long genderId);
-    List<Event> findByTicket(Tickets ticket);
-    List<Event> findEventByTicketId(@Param("ticketId") Long ticketId);
+
+    @Query("SELECT e FROM Event e JOIN e.tickets t WHERE t = :ticket")
+    List<Event> findEventsByTicket(@Param("ticket") Tickets ticket);
+
+    @Query("SELECT e FROM Event e JOIN e.tickets t WHERE t.id = :ticketId")
+    List<Event> findEventsByTicketId(@Param("ticketId") Long ticketId);
 
 }

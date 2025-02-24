@@ -39,11 +39,9 @@ public class EventService {
         return eventRepository.findByGeneralMusicsId(genderId);
     }
 
-    public List<Event> getEventByTicket(Tickets ticket) {
-        return eventRepository.findByTicket(ticket);
-    }
+    public List<Event> getEventByTicket(Tickets ticket) {return eventRepository.findEventsByTicket(ticket);}
 
-    public List<Event> getEventByTicketId(Long ticketId) {return eventRepository.findEventByTicketId(ticketId);}
+    public List<Event> getEventByTicketId(Long ticketId) {return eventRepository.findEventsByTicketId(ticketId);}
 
     public Event saveEvent(Event event) {
         if (event.getAddress() == null || event.getArtists() == null) {
@@ -62,11 +60,6 @@ public class EventService {
             }
             if (event.getAddress() != null) {
                 existingEvent.setAddress(event.getAddress());
-            }
-            if (event.getTicket() != null && event.getTicket().getId() != null) {
-                Tickets post = new Tickets();
-                post.setId(event.getTicket().getId());
-                existingEvent.setTicket(post);
             }
             return eventRepository.save(existingEvent);
         } catch (StaleObjectStateException ex) {
