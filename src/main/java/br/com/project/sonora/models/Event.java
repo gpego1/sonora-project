@@ -1,10 +1,9 @@
 package br.com.project.sonora.models;
-
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Objects;
@@ -15,6 +14,7 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -52,15 +52,6 @@ public class Event {
 
     @OneToMany(mappedBy = "event")
     private Set<Tickets> tickets = new HashSet<>();
-
-    public Event(Long id, Date date, Address address, Set<GeneralMusic> generalMusics, Set<Artist> artists, Set<ArtistEventSetlist> artistEventSetlists) {
-        this.id = id;
-        this.date = date;
-        this.address = address;
-        this.generalMusics = generalMusics;
-        this.artists = artists;
-        this.artistEventSetlists = artistEventSetlists;
-    }
 
     @Override
     public boolean equals(Object o) {

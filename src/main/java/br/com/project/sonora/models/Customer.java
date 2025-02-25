@@ -1,10 +1,10 @@
 package br.com.project.sonora.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import java.util.List;
 import java.util.Objects;
 
@@ -13,6 +13,7 @@ import java.util.Objects;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class Customer implements User {
 
     @Id
@@ -40,14 +41,6 @@ public class Customer implements User {
 
    @Version
     private Integer version;
-
-    public Customer(String name, String cpf, String email, String password, String phone) {
-        this.name = name;
-        this.cpf = cpf;
-        this.email = email;
-        this.password = password;
-        this.phone = phone;
-    }
 
     @Override
     public boolean equals(Object o) {
