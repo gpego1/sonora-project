@@ -20,6 +20,7 @@ public class Event {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    //Ligação entre Event e Host
     @ManyToOne
     @JoinColumn(name = "host_id")
     private Host host;
@@ -27,10 +28,12 @@ public class Event {
     @Column(nullable = false)
     private Date date;
 
+    //Ligação entre Event e Endereço
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id")
     private Address address;
 
+    //Ligação entre Event e Gêneros musicais
     @ManyToMany
     @JoinTable(
             name = "event-genders",
@@ -39,6 +42,7 @@ public class Event {
     )
     private Set<GeneralMusic> generalMusics = new HashSet<>();
 
+    //Ligação entre Event e Artistas
     @ManyToMany
     @JoinTable(
             name = "artists-events",
@@ -47,9 +51,11 @@ public class Event {
     )
     private Set<Artist> artists = new HashSet<>();
 
+    //Tabela de relacionamento entre Event e Artistas com setlist
     @OneToMany(mappedBy = "event")
     private Set<ArtistEventSetlist> artistEventSetlists = new HashSet<>();
 
+    //Ligação entre Event e Ingressos
     @OneToMany(mappedBy = "event")
     private Set<Tickets> tickets = new HashSet<>();
 
