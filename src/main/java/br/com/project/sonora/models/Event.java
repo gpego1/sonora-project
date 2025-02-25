@@ -20,11 +20,16 @@ public class Event {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne
+    @JoinColumn(name = "host_id")
+    private Host host;
+
     @Column(nullable = false)
     private Date date;
 
-    @Column(nullable = false)
-    private String address;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "address_id")
+    private Address address;
 
     @ManyToMany
     @JoinTable(
@@ -48,7 +53,7 @@ public class Event {
     @OneToMany(mappedBy = "event")
     private Set<Tickets> tickets = new HashSet<>();
 
-    public Event(Long id, Date date, String address, Set<GeneralMusic> generalMusics, Set<Artist> artists, Set<ArtistEventSetlist> artistEventSetlists) {
+    public Event(Long id, Date date, Address address, Set<GeneralMusic> generalMusics, Set<Artist> artists, Set<ArtistEventSetlist> artistEventSetlists) {
         this.id = id;
         this.date = date;
         this.address = address;
