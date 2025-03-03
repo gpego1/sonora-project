@@ -43,6 +43,12 @@ public class Artist implements User{
     @Version
     private Integer version;
 
+    public Artist(String name, String email, String password) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

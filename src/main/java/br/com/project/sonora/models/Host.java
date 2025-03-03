@@ -25,8 +25,20 @@ public class Host implements User{
     private String name;
 
     @Column(unique = true, nullable = false)
+    private String cpf;
+
+    @Column(unique = true, nullable = false)
     private String email;
 
     @Column(nullable = false)
     private String password;
+
+    @Column(nullable = false)
+    private String phone;
+
+    public Host(String name, String email, String password) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+    }
 }
