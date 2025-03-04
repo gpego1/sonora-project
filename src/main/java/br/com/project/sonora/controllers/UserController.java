@@ -42,15 +42,15 @@ public class UserController {
 
             switch (userDTO.getUserType()) {
                 case "customer" -> {
-                    Customer customer = new Customer(userDTO.getEmail(), encodedPassword); // Use encodedPassword
+                    Customer customer = new Customer(userDTO.getName(), userDTO.getCpf(), userDTO.getEmail(), encodedPassword, userDTO.getPhone()); // Use encodedPassword
                     customerRepository.save(customer);
                 }
                 case "artist" -> {
-                    Artist artist = new Artist(userDTO.getEmail(), encodedPassword); // Use encodedPassword
+                    Artist artist = new Artist(userDTO.getName(), userDTO.getCpf(), userDTO.getEmail(), encodedPassword, userDTO.getPhone()); // Use encodedPassword
                     artistRepository.save(artist);
                 }
                 case "host" -> {
-                    Host host = new Host(userDTO.getEmail(), encodedPassword); // Use encodedPassword
+                    Host host = new Host(userDTO.getName(), userDTO.getCpf(), userDTO.getEmail(), encodedPassword, userDTO.getPhone()); // Use encodedPassword
                     hostRepository.save(host);
                 }
                 default -> {

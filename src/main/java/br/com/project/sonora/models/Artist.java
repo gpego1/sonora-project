@@ -48,6 +48,14 @@ public class Artist implements User{
         this.password = password;
     }
 
+    public Artist(String name, String cpf, String email, String encodedPassword, String phone) {
+        this.name = name;
+        this.cpf = cpf;
+        this.email = email;
+        this.password = encodedPassword;
+        this.phone = phone;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

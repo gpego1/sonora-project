@@ -40,4 +40,12 @@ public class Host implements User{
         this.email = email;
         this.password = password;
     }
+
+    public Host(String name, String cpf, String email, String encodedPassword, String phone) {
+        this.name = name;
+        this.cpf = cpf;
+        this.email = email;
+        this.password = encodedPassword;
+        this.phone = phone;
+    }
 }
