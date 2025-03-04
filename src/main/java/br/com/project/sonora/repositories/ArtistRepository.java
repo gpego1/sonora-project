@@ -9,4 +9,5 @@ import java.util.Optional;
 @Repository
 public interface ArtistRepository extends JpaRepository<Artist, Long> {
     Optional<Artist> findById(Long id);
+    Optional<Artist> findByEmail(String email);
 }

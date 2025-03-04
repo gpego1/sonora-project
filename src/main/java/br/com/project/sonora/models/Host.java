@@ -36,8 +36,7 @@ public class Host implements User{
     @Column(nullable = false)
     private String phone;
 
-    public Host(String name, String email, String password) {
-        this.name = name;
+    public Host(String email, String password) {
         this.email = email;
         this.password = password;
     }

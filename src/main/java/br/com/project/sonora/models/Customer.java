@@ -42,8 +42,7 @@ public class Customer implements User {
    @Version
     private Integer version;
 
-    public Customer(String name, String email, String password) {
-        this.name = name;
+    public Customer( String email, String password) {
         this.email = email;
         this.password = password;
     }

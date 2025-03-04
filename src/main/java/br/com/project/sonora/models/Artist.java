@@ -43,8 +43,7 @@ public class Artist implements User{
     @Version
     private Integer version;
 
-    public Artist(String name, String email, String password) {
-        this.name = name;
+    public Artist(String email, String password) {
         this.email = email;
         this.password = password;
     }

@@ -3,7 +3,6 @@ import br.com.project.sonora.errors.ErrorResponse;
 import br.com.project.sonora.errors.exceptions.EntityNotFoundException;
 import br.com.project.sonora.models.Event;
 import br.com.project.sonora.models.Tickets;
-import br.com.project.sonora.models.Artist;
 import br.com.project.sonora.services.TicketService;
 import jakarta.persistence.OptimisticLockException;
 import org.springframework.beans.factory.annotation.Autowired;
