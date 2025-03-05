@@ -1,17 +1,12 @@
 package br.com.project.sonora.controllers;
 
 import br.com.project.sonora.dto.UserDTO;
-import br.com.project.sonora.errors.exceptions.EmailAlreadyExistsException;
-import br.com.project.sonora.errors.exceptions.InvalidCPFException;
-import br.com.project.sonora.errors.exceptions.InvalidEmailException;
-import br.com.project.sonora.errors.exceptions.InvalidPhoneException;
 import br.com.project.sonora.models.Artist;
 import br.com.project.sonora.models.Customer;
 import br.com.project.sonora.models.Host;
 import br.com.project.sonora.repositories.ArtistRepository;
 import br.com.project.sonora.repositories.CustomerRepository;
 import br.com.project.sonora.repositories.HostRepository;
-import br.com.project.sonora.util.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,8 +15,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.io.InvalidClassException;
 import java.util.Optional;
 
 @RestController
@@ -30,9 +23,6 @@ public class UserController {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    private Validator validator;
 
     private final CustomerRepository customerRepository;
     private final ArtistRepository artistRepository;
@@ -47,33 +37,18 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<String> registerUser(@RequestBody UserDTO userDTO) {
         try {
-            if (!validator.isValidCPF(userDTO.getCpf())) {
-                throw new InvalidCPFException("Invalid CPF");
-            }
-            if (!validator.isValidEmail(userDTO.getEmail())) {
-                throw new InvalidEmailException("Invalid email");
-            }
-            if (!validator.isValidPhone(userDTO.getPhone())) {
-                throw new InvalidPhoneException("Phone number must be provided");
-            }
-            if (customerRepository.findByEmail(userDTO.getEmail()).isPresent() ||
-                    artistRepository.findByEmail(userDTO.getEmail()).isPresent() ||
-                    hostRepository.findByEmail(userDTO.getEmail()).isPresent()) {
-                throw new EmailAlreadyExistsException("Email Already Exists");
-            }
-
             String encodedPassword = passwordEncoder.encode(userDTO.getPassword());
             switch (userDTO.getUserType()) {
                 case "customer" -> {
-                    Customer customer = new Customer(userDTO.getName(), userDTO.getCpf(), userDTO.getEmail(), encodedPassword, userDTO.getPhone()); // Use encodedPassword
+                    Customer customer = new Customer(userDTO.getName(), userDTO.getCpf(), userDTO.getEmail(), encodedPassword, userDTO.getPhone());
                     customerRepository.save(customer);
                 }
                 case "artist" -> {
-                    Artist artist = new Artist(userDTO.getName(), userDTO.getCpf(), userDTO.getEmail(), encodedPassword, userDTO.getPhone()); // Use encodedPassword
+                    Artist artist = new Artist(userDTO.getName(), userDTO.getCpf(), userDTO.getEmail(), encodedPassword, userDTO.getPhone());
                     artistRepository.save(artist);
                 }
                 case "host" -> {
-                    Host host = new Host(userDTO.getName(), userDTO.getCpf(), userDTO.getEmail(), encodedPassword, userDTO.getPhone()); // Use encodedPassword
+                    Host host = new Host(userDTO.getName(), userDTO.getCpf(), userDTO.getEmail(), encodedPassword, userDTO.getPhone());
                     hostRepository.save(host);
                 }
                 default -> {
@@ -91,15 +66,15 @@ public class UserController {
         try {
             Optional<Customer> customer = customerRepository.findByEmail(userDTO.getEmail());
             if (customer.isPresent() && passwordEncoder.matches(userDTO.getPassword(), customer.get().getPassword())) {
-                return ResponseEntity.ok("Login successful for customer: " + customer.get().getEmail()); // Add email
+                return ResponseEntity.ok("Login successful for customer: " + customer.get().getEmail());
             }
             Optional<Artist> artist = artistRepository.findByEmail(userDTO.getEmail());
             if (artist.isPresent() && passwordEncoder.matches(userDTO.getPassword(), artist.get().getPassword())) {
-                return ResponseEntity.ok("Login successful for artist: " + artist.get().getEmail()); // Add email
+                return ResponseEntity.ok("Login successful for artist: " + artist.get().getEmail());
             }
             Optional<Host> host = hostRepository.findByEmail(userDTO.getEmail());
             if (host.isPresent() && passwordEncoder.matches(userDTO.getPassword(), host.get().getPassword())) {
-                return ResponseEntity.ok("Login successful for host: " + host.get().getEmail()); // Add email
+                return ResponseEntity.ok("Login successful for host: " + host.get().getEmail());
             }
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email or password");
         } catch (Exception e) {
