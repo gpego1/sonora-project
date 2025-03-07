@@ -55,7 +55,7 @@ public class Event {
     @OneToMany(mappedBy = "event")
     private Set<ArtistEventSetlist> artistEventSetlists = new HashSet<>();
 
-    //Ligação entre Event e Ingressos
+
     @OneToMany(mappedBy = "event")
     private Set<Tickets> tickets = new HashSet<>();
 
