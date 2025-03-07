@@ -1,5 +1,6 @@
 package br.com.project.sonora.controllers;
 
+import br.com.project.sonora.dto.CustomerDTO;
 import br.com.project.sonora.models.Customer;
 import br.com.project.sonora.services.CustomerService;
 import jakarta.persistence.OptimisticLockException;
@@ -13,29 +14,35 @@ import java.util.List;
 @RestController
 @RequestMapping("/customers")
 public class CustomerController {
+
     @Autowired
     private CustomerService customerService;
 
-
     @GetMapping
-    public List<Customer> getAllCustomers() {
-        return customerService.getAllCustomers();
+    public ResponseEntity<List<CustomerDTO>> getAllCustomers() {
+        List<CustomerDTO> customers = customerService.getAllCustomers();
+        return ResponseEntity.ok(customers);
     }
+
     @GetMapping("/{id}")
-    public ResponseEntity<Customer> getCustomerById(@PathVariable Long id) {
-        return customerService.getCustomerById(id)
-                .map(customer -> ResponseEntity.ok(customer))
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<CustomerDTO> getCustomerById(@PathVariable Long id) {
+        CustomerDTO customer = customerService.getCustomerById(id);
+        if (customer != null) {
+            return ResponseEntity.ok(customer);
+        }
+        return ResponseEntity.notFound().build();
     }
+
     @PostMapping
-    public Customer createCustomer(@RequestBody Customer customer) {
-        return customerService.saveCustomer(customer);
+    public ResponseEntity<CustomerDTO> createCustomer(@RequestBody Customer customer) {
+        CustomerDTO createdCustomer = customerService.saveCustomer(customer);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdCustomer);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateCustomer(@PathVariable Long id, @RequestBody Customer customer) {
         try {
-            Customer updatedCustomer = customerService.updateCustomer(id, customer);
+            CustomerDTO updatedCustomer = customerService.updateCustomer(id, customer);
             return ResponseEntity.ok(updatedCustomer);
         } catch (OptimisticLockException ex) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());

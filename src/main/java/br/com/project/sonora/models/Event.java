@@ -1,4 +1,5 @@
 package br.com.project.sonora.models;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -72,11 +73,11 @@ public class Event {
     }
     @Override
     public String toString() {
-        return "Order{" +
+        return "Event{" +
                 "id=" + id +
                 ", date=" + date +
-                ", endereco='" + address + '\'' +
-                ", customer=" +
+                ", address=" + address +
+                ", host=" + host +
                 '}';
     }
 }

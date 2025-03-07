@@ -1,5 +1,6 @@
 package br.com.project.sonora.services;
 
+import br.com.project.sonora.dto.ArtistDTO;
 import br.com.project.sonora.models.Artist;
 import br.com.project.sonora.repositories.ArtistRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -10,7 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ArtistService {
@@ -18,22 +19,26 @@ public class ArtistService {
     @Autowired
     private ArtistRepository artistRepository;
 
-    public List<Artist> getAllArtists() {
-        return artistRepository.findAll();
+    public List<ArtistDTO> getAllArtists() {
+        return artistRepository.findAll().stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
     }
 
-    public Optional<Artist> getSellerById(Long id) {
-        return artistRepository.findById(id);
+    public ArtistDTO getArtistById(Long id) {
+        return artistRepository.findById(id)
+                .map(this::convertToDTO)
+                .orElse(null);
     }
 
-    public Artist saveSeller(Artist artist) {
-        return artistRepository.save(artist);
+    public ArtistDTO saveArtist(Artist artist) {
+        return convertToDTO(artistRepository.save(artist));
     }
 
     @Transactional
-    public Artist updateSeller(Long id, Artist artist) {
+    public ArtistDTO updateArtist(Long id, Artist artist) {
         Artist existingArtist = artistRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Seller not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Artist not found"));
 
         try {
             if (!artist.getName().equals(existingArtist.getName())) {
@@ -52,13 +57,23 @@ public class ArtistService {
                 existingArtist.setPassword(artist.getPassword());
             }
 
-            return artistRepository.save(existingArtist);
+            return convertToDTO(artistRepository.save(existingArtist));
         } catch (StaleObjectStateException ex) {
             throw new OptimisticLockException("The data you were trying to update has been modified by another user. Please refresh the data and try again.");
         }
     }
 
-    public void deleteSeller(Long id) {
+    public void deleteArtist(Long id) {
         artistRepository.deleteById(id);
+    }
+
+    private ArtistDTO convertToDTO(Artist artist) {
+        return new ArtistDTO(
+                artist.getId(),
+                artist.getName(),
+                artist.getCpf(),
+                artist.getEmail(),
+                artist.getPhone()
+        );
     }
 }

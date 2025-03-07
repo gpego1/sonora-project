@@ -18,4 +18,12 @@ public class UserDTO {
     private String password;
     private String phone;
 
+    public UserDTO(String cpf, String name, String email, String phone) {
+        this.cpf = cpf;
+        this.name = name;
+        this.email = email;
+        this.phone = phone;
+        this.userType = "Cliente";
+        this.password = "123456";
+    }
 }

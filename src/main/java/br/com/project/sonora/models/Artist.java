@@ -1,4 +1,5 @@
 package br.com.project.sonora.models;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -41,7 +42,7 @@ public class Artist implements User{
     private String phone;
 
     @Version
-    private Integer version;
+    private Long version;
 
     public Artist(String email, String password) {
         this.email = email;

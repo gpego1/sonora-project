@@ -1,4 +1,5 @@
 package br.com.project.sonora.services;
+
 import br.com.project.sonora.dto.AddressDTO;
 import br.com.project.sonora.dto.EventDTO;
 import br.com.project.sonora.dto.UserDTO;
@@ -6,6 +7,7 @@ import br.com.project.sonora.models.*;
 import br.com.project.sonora.repositories.ArtistRepository;
 import br.com.project.sonora.repositories.EventRepository;
 import br.com.project.sonora.repositories.GeneralMusicRepository;
+import br.com.project.sonora.repositories.HostRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.OptimisticLockException;
 import org.hibernate.StaleObjectStateException;
@@ -13,9 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,6 +28,8 @@ public class EventService {
 
     @Autowired
     private ArtistRepository artistRepository;
+    @Autowired
+    private HostRepository hostRepository;
 
     public List<EventDTO> getAllEvents() {
         return eventRepository.findAll().stream()
@@ -65,10 +67,34 @@ public class EventService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public EventDTO saveEvent(Event event) {
-        if (event.getAddress() == null || event.getArtists() == null) {
-            throw new IllegalArgumentException("The order mus have another Customer.");
+        Set<Artist> artists = new HashSet<>();
+
+        if (event.getArtists() != null) {
+            for (Artist artist : event.getArtists()) {
+                if (artist.getId() != null) {
+                    artistRepository.findById(artist.getId()).ifPresent(artists::add);
+                }
+            }
         }
+        event.setArtists(artists);
+
+        if (event.getHost() == null) {
+            throw new IllegalArgumentException("Event must have a host.");
+        }
+        Host host;
+        if (event.getHost().getId() != null) {
+            host = hostRepository.findById(event.getHost().getId()).orElseThrow(() -> new EntityNotFoundException("Host not found"));
+        } else {
+            host = hostRepository.save(event.getHost());
+        }
+        event.setHost(host);
+
+        if (event.getAddress() == null) {
+            throw new IllegalArgumentException("Event must have an address.");
+        }
+
         return convertToDTO(eventRepository.save(event));
     }
 
@@ -95,15 +121,12 @@ public class EventService {
 
     @Transactional
     public EventDTO addGenderToEvent(Long eventId, GeneralMusic gender) {
-        Optional<Event> eventOptional = eventRepository.findById(eventId);
-        if (!eventOptional.isPresent()) {
-            Event event = eventOptional.get();
-            GeneralMusic existingGender = generalMusicRepository.findById(gender.getId()).orElse(gender);
-            event.getGeneralMusics().add(existingGender);
+        return eventRepository.findById(eventId).map(event -> {
+            generalMusicRepository.findById(gender.getId()).ifPresent(event.getGeneralMusics()::add);
             return convertToDTO(eventRepository.save(event));
-        }
-        return null;
+        }).orElse(null);
     }
+
     @Transactional
     public EventDTO removeGenderFromEvent(Long eventId, Long genderId) {
         Optional<Event> eventOptional = eventRepository.findById(eventId);
@@ -120,15 +143,12 @@ public class EventService {
 
     @Transactional
     public EventDTO addArtistToEvent(Long eventId, Artist artist) {
-        Optional<Event> eventOptional = eventRepository.findById(eventId);
-        if (!eventOptional.isPresent()) {
-            Event event = eventOptional.get();
-            Artist existingArtist = artistRepository.findById(artist.getId()).orElse(artist);
-            event.getArtists().add(existingArtist);
+        return eventRepository.findById(eventId).map(event -> {
+            artistRepository.findById(artist.getId()).ifPresent(event.getArtists()::add);
             return convertToDTO(eventRepository.save(event));
-        }
-        return null;
+        }).orElse(null);
     }
+
     @Transactional
     public EventDTO removeArtistFromEvent(Long eventId, Long artistId) {
         Optional<Event> eventOptional = eventRepository.findById(eventId);
@@ -142,6 +162,7 @@ public class EventService {
         }
         return null;
     }
+
     private EventDTO convertToDTO(Event event) {
         List<GeneralMusic> genres = new ArrayList<>(event.getGeneralMusics());
 
@@ -150,16 +171,27 @@ public class EventService {
                 .collect(Collectors.toList());
 
         List<UserDTO> hosts = new ArrayList<>();
-        hosts.add(converToUserDTO(event.getHost()));
+        UserDTO hostDTO = converToUserDTO(event.getHost());
+        if (hostDTO != null) {
+            hosts.add(hostDTO);
+        }
 
-        AddressDTO addressDTO = new AddressDTO(event.getAddress().getId(),event.getAddress().getState(), event.getAddress().getCity(), event.getAddress().getStreet(), event.getAddress().getNumber(), event.getAddress().getCep());
+        AddressDTO addressDTO = null;
+        if (event.getAddress() != null) {
+            addressDTO = new AddressDTO(event.getAddress().getId(), event.getAddress().getState(), event.getAddress().getCity(), event.getAddress().getStreet(), event.getAddress().getNumber(), event.getAddress().getCep());
+        }
+
         return new EventDTO(event.getId(), event.getDate(), addressDTO, genres, artists, hosts);
     }
+
     private UserDTO converToUserDTO(Artist artist) {
-        return new UserDTO(artist.getCpf(), artist.getName(), artist.getEmail(), artist.getEmail(), artist.getPassword(), artist.getPhone());
+        return new UserDTO(artist.getCpf(), artist.getName(), artist.getEmail(), artist.getPhone());
     }
+
     private UserDTO converToUserDTO(Host host) {
-        return new UserDTO(host.getCpf(), host.getName(), host.getEmail(), host.getEmail(), host.getPassword(), host.getPhone());
+        if (host != null) {
+            return new UserDTO(host.getCpf(), host.getName(), host.getEmail(), host.getPhone());
+        }
+        return null;
     }
 }
-

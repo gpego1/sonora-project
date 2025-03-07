@@ -1,5 +1,6 @@
 package br.com.project.sonora.controllers;
 
+import br.com.project.sonora.dto.ArtistDTO;
 import br.com.project.sonora.models.Artist;
 import br.com.project.sonora.services.ArtistService;
 import jakarta.persistence.OptimisticLockException;
@@ -18,26 +19,30 @@ public class ArtistController {
     private ArtistService artistService;
 
     @GetMapping
-    public List<Artist> getAllSellers() {
-        return artistService.getAllArtists();
+    public ResponseEntity<List<ArtistDTO>> getAllArtists() {
+        List<ArtistDTO> artists = artistService.getAllArtists();
+        return ResponseEntity.ok(artists);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Artist> getSellerById(@PathVariable Long id) {
-        return artistService.getSellerById(id)
-                .map(seller -> ResponseEntity.ok(seller))
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<ArtistDTO> getArtistById(@PathVariable Long id) {
+        ArtistDTO artist = artistService.getArtistById(id);
+        if (artist != null) {
+            return ResponseEntity.ok(artist);
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @PostMapping
-    public Artist createSeller(@RequestBody Artist artist) {
-        return artistService.saveSeller(artist);
+    public ResponseEntity<ArtistDTO> createArtist(@RequestBody Artist artist) {
+        ArtistDTO createdArtist = artistService.saveArtist(artist);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdArtist);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateSeller(@PathVariable Long id, @RequestBody Artist artist) {
+    public ResponseEntity<?> updateArtist(@PathVariable Long id, @RequestBody Artist artist) {
         try {
-            Artist updatedArtist = artistService.updateSeller(id, artist);
+            ArtistDTO updatedArtist = artistService.updateArtist(id, artist);
             return ResponseEntity.ok(updatedArtist);
         } catch (OptimisticLockException ex) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
@@ -45,8 +50,8 @@ public class ArtistController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteSeller(@PathVariable Long id) {
-        artistService.deleteSeller(id);
+    public ResponseEntity<Void> deleteArtist(@PathVariable Long id) {
+        artistService.deleteArtist(id);
         return ResponseEntity.noContent().build();
     }
 }
