@@ -1,0 +1,24 @@
+.dashboard-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+.conteudo-dashboard{
+    margin-top: 20px;
+}
+
+.logout-button {
+    background-color: #f44336;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.logout-button:hover {
+    background-color: #d32f2f;
+}
